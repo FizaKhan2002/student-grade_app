@@ -117,5 +117,4 @@ elif action == "Analyze":
         st.subheader("🏅 Top Performer")
         st.success(f"{df.iloc[0]['Name']} with {df.iloc[0]['Total']} marks!")
 
-    else:
-        st.info("No student records to analyze.")
+    
