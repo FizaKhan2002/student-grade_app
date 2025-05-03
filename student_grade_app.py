@@ -80,29 +80,36 @@ elif action == "Show All":
     else:
         st.info("No student records found.")
 
-# Analyze student data
+
 
 # Analyze student data
 elif action == "Analyze":
     st.header("📊 Student Performance Analyzer")
 
     if st.session_state.student_data:
-        # Convert dictionary to DataFrame
+        # Build DataFrame
         df = pd.DataFrame([
             {
                 "Name": name,
-                "Grades": grades,
-                "Total": sum(grades),
-                "Average": sum(grades) / len(grades),
-                "Grade": get_grade(sum(grades) / len(grades))
+                "Average": sum(grades) / len(grades)
             }
             for name, grades in st.session_state.student_data.items()
         ])
 
-        df = df.sort_values(by="Total", ascending=False).reset_index(drop=True)
+        df = df.sort_values(by="Average", ascending=False).reset_index(drop=True)
 
-        st.subheader("📋 Student Summary Table")
+        st.subheader("📈 Average Marks per Student")
+        st.bar_chart(df.set_index("Name"))
+
+        st.subheader("🏅 Top Performer")
+        top = df.iloc[0]
+        st.success(f"{top['Name']} with average marks {top['Average']:.2f}")
+
+        st.subheader("📋 Raw Data")
         st.dataframe(df, use_container_width=True)
+    else:
+        st.info("No student records to analyze.")
+
 
         st.subheader("📊 Total Marks Comparison")
         st.bar_chart(data=df, x="Name", y="Total")
